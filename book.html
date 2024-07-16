@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Booking System</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .box {
+            width: 60px;
+            height: 60px;
+            margin: 10px;
+            display: inline-block;
+            border-radius: 10px; /* Rounded edges */
+            cursor: pointer;
+        }
+        .available {
+            background-color: #4CAF50; /* Green */
+        }
+        .booked {
+            background-color: #f44336; /* Red */
+        }
+        .selected {
+            background-color: #2196F3; /* Blue */
+        }
+        .seat-row {
+            display: flex;
+            justify-content: center;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container text-center mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1>Bus Booking System</h1>
+        </div>
+        <div class="col-12">
+            <div id="boxes">
+                <!-- Boxes will be generated here -->
+            </div>
+        </div>
+    </div>
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color available"></div> Available
+        </div>
+        <div class="legend-item">
+            <div class="legend-color booked"></div> Booked
+        </div>
+        <div class="legend-item">
+            <div class="legend-color selected"></div> Selected
+        </div>
+    </div>
+</div>
+
+<script>
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    const busId = getQueryParam('busId');
+    if (!busId) {
+        alert('Bus ID is required');
+        throw new Error('Bus ID is required');
+    }
+
+    const boxesContainer = document.getElementById('boxes');
+    const boxCount = 50;
+
+    for (let i = 0; i < boxCount; i++) {
+        if (i % 5 === 0) {
+            const row = document.createElement('div');
+            row.classList.add('seat-row');
+            boxesContainer.appendChild(row);
+        }
+
+        const box = document.createElement('div');
+        box.classList.add('box');
+        box.classList.add('available');
+        box.addEventListener('click', function() {
+            if (!box.classList.contains('booked')) {
+                box.classList.toggle('selected');
+            }
+        });
+        boxesContainer.lastChild.appendChild(box);
+    }
+
+    // Fetch booked seats and update the UI
+    fetch(`http://localhost:5041/api/Bus/${busId}/booked-seats`)
+        .then(response => response.json())
+        .then(bookedSeats => {
+            bookedSeats.forEach(index => {
+                const box = boxesContainer.getElementsByClassName('box')[index];
+                if (box) {
+                    box.classList.remove('available');
+                    box.classList.add('booked');
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching booked seats:', error));
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

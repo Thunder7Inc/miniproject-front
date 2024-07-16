@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Bus Ticket</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: hsl(0, 0%, 100%);
+            color: hsl(240, 10%, 3.9%);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bg-background {
+            background-color: hsl(0, 0%, 100%);
+        }
+
+        .text-muted-foreground {
+            color: hsl(240, 3.8%, 45%);
+        }
+
+        .text-foreground {
+            color: hsl(240, 10%, 3.9%);
+        }
+
+        .bg-muted {
+            background-color: hsl(240, 4.8%, 95.9%);
+        }
+
+        .border-none {
+            border: none;
+        }
+
+        .focus-ring-0:focus {
+            box-shadow: none;
+        }
+
+        .rounded-md {
+            border-radius: 0.5rem;
+        }
+
+        .shadow-lg {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .map-pin-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .font-heading {
+            font-weight: bold;
+        }
+
+        .max-w-2xl {
+            max-width: 42rem;
+        }
+
+        .form-container {
+            padding: 1.5rem 2rem;
+        }
+
+        .form-control {
+            flex-grow: 1;
+        }
+
+        .gap-3 {
+            gap: 1rem;
+        }
+
+        .gap-4 {
+            gap: 1.5rem;
+        }
+
+        .mt-8 {
+            margin-top: 2rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .space-y-4>*+* {
+            margin-top: 1rem;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .align-items-center {
+            align-items: center;
+        }
+
+        .bus-results {
+            margin-top: 2rem;
+        }
+
+        .bus-result {
+            padding: 1rem;
+            border: 1px solid hsl(240, 5.9%, 90%);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            background-color: hsl(0, 0%, 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bus-result p {
+            margin: 0;
+        }
+
+        .bus-result .btn-book {
+            margin-left: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand text-light" href="#">
+            <img src="https://getbootstrap.com/docs/5.2/assets/brand/bootstrap-logo.svg" alt="Logo" width="30"
+                 height="24" class="d-inline-block align-text-top">
+            Violet Bus
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+                aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <form class="d-flex justify-content-center ms-auto" role="search">
+                <a href="logout.html" class="btn btn-danger mx-2">Logout</a>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="max-w-2xl mx-auto bg-background rounded-lg shadow-lg form-container">
+        <div class="text-center space-y-4">
+            <h1 class="text-3xl font-heading">Search Buses</h1>
+            <p class="text-muted-foreground">Enter your travel details to book your bus ticket.</p>
+        </div>
+        <form id="busSearchForm" class="mt-8">
+            <div class="form-group d-flex align-items-center gap-3 bg-muted rounded-md px-4 py-3 my-3">
+                <svg class="map-pin-icon text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     viewBox="0 0 24 24">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                    <circle cx="12" cy="10" r="3" />
+                </svg>
+                <input type="text" id="source" class="form-control border-none focus-ring-0 bg-transparent"
+                       placeholder="From">
+            </div>
+            <div class="form-group d-flex align-items-center gap-3 bg-muted rounded-md px-4 py-3">
+                <svg class="map-pin-icon text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     viewBox="0 0 24 24">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                    <circle cx="12" cy="10" r="3" />
+                </svg>
+                <input type="text" id="destination" class="form-control border-none focus-ring-0 bg-transparent"
+                       placeholder="To">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block mt-4">Search Buses</button>
+        </form>
+        <div id="busResults" class="bus-results"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+</script>
+<script>
+    document.getElementById('busSearchForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const source = document.getElementById('source').value;
+        const destination = document.getElementById('destination').value;
+
+        fetch(`http://localhost:5041/api/Bus/search?source=${source}&destination=${destination}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultsContainer = document.getElementById('busResults');
+                resultsContainer.innerHTML = ''; // Clear previous results
+                data.forEach(bus => {
+                    const busElement = document.createElement('div');
+                    busElement.classList.add('bus-result');
+                    busElement.innerHTML = `
+                            <div>
+                                <p><strong>Bus Number:</strong> ${bus.busNumber}</p>
+                                <p><strong>Capacity:</strong> ${bus.capacity}</p>
+                            </div>
+                            <a href="book.html?busId=${bus.busId}" class="btn btn-primary btn-book">Book Now</a>
+                        `;
+                    resultsContainer.appendChild(busElement);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    });
+</script>
+</body>
+
+</html>
