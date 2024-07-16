@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Logout</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remove the token from local storage
+            localStorage.removeItem('token');
+
+            // Redirect to the index.html page
+            window.location.href = 'index.html';
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>

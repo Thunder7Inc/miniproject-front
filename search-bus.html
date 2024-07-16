@@ -181,8 +181,13 @@
         event.preventDefault();
         const source = document.getElementById('source').value;
         const destination = document.getElementById('destination').value;
+        const token = localStorage.getItem('token');
 
-        fetch(`http://localhost:5041/api/Bus/search?source=${source}&destination=${destination}`)
+        fetch(`http://localhost:5041/api/Bus/search?source=${source}&destination=${destination}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 const resultsContainer = document.getElementById('busResults');
@@ -191,12 +196,12 @@
                     const busElement = document.createElement('div');
                     busElement.classList.add('bus-result');
                     busElement.innerHTML = `
-                            <div>
-                                <p><strong>Bus Number:</strong> ${bus.busNumber}</p>
-                                <p><strong>Capacity:</strong> ${bus.capacity}</p>
-                            </div>
-                            <a href="book.html?busId=${bus.busId}" class="btn btn-primary btn-book">Book Now</a>
-                        `;
+                        <div>
+                            <p><strong>Bus Number:</strong> ${bus.busNumber}</p>
+                            <p><strong>Capacity:</strong> ${bus.capacity}</p>
+                        </div>
+                        <a href="book.html?busId=${bus.busId}" class="btn btn-primary btn-book">Book Now</a>
+                    `;
                     resultsContainer.appendChild(busElement);
                 });
             })
